@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1 class="text-center my-5">{{title}}</h1>
+    <div class="row justify-content-center">
+        <div class="col-7" id="insert">
+            <a href="/bbs/insert">글쓰기</a>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-7">
+            <div id="div_list" ></div>
+        </div>
+    </div>
+
+    {%raw%}
+    <script id="temp_list" type="x-handlebars-template">
+        <table class="table">
+            {{#each .}}
+                <tr>
+                    <td>{{bbs_id}}</td>
+                    <td><a href="/bbs/{{bbs_id}}">{{bbs_title}}</a></td>
+                    <td>{{bbs_writer}}</td>
+                    <td>{{fmtdate}}</td>
+                </tr>
+            {{/each}}
+        </table>
+    </script>
+    {%endraw%}
+
+    <script>
+        getList();
+        function getList(){
+            $.ajax({
+                type:"get", 
+                url:"/bbs/list.json",
+                success:function(data){
+                    const temp=Handlebars.compile($("#temp_list").html());
+                    $("#div_list").html(temp(data));
+                }
+            })
+        }
+        if(uid){
+            $("#insert").show();
+        }else{
+            $("#insert").hide();
+        }
+    </script>
+</body>
+</html>
