@@ -10,7 +10,13 @@ def list():
 
 @bp.route('/list.json')
 def listJSON():
-    return bbsDAO.list();
+    args = request.args
+    page = args['page']
+    size = args['size']
+    list = bbsDAO.list(page, size)
+    total =bbsDAO.total()
+    data = {'total': total.get('cnt'), 'list':list}
+    return data
 
 @bp.route('/insert')
 def insert():
@@ -32,4 +38,17 @@ def read(bbs_id):
 def delete(bid):
     result = bbsDAO.delete(bid)
     return result
-        
+
+@bp.route('/update/<int:bid>')
+def update(bid):
+    vo=bbsDAO.read(bid)
+    return render_template('index.html', bbs=vo, title="글수정페이지",  pageName='bbs/update.html')
+
+@bp.route('', methods=['PUT'])
+def updatePost():
+    req = json.loads(request.get_data())
+    print(req)
+    result = bbsDAO.update(req)
+    return result
+
+
