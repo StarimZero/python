@@ -72,12 +72,9 @@ e = browser.find_element(By.XPATH, first)
 
 # 검색목록
 es = browser.find_elements(By.XPATH, '//*[contains(@class, "concurrent_ConcurrentItemContainer__NDJda")]')
-index = 0
+es = es[:10]
 for e in es:
-    index += 1
     print(e.text)
     print('-' * 80)
-    if index >= 10:
-        break
 print("전체 검색 수 : ", len(es))
 
